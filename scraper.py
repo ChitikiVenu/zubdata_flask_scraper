@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 
-def run_scraper(query):
+def scrape_google_maps(query):
     try:
         options = Options()
         options.add_argument("--headless")
@@ -10,7 +10,7 @@ def run_scraper(query):
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--disable-gpu")
         options.add_argument("--window-size=1920x1080")
-        options.binary_location = "/usr/bin/google-chrome"  # 👈 Important
+        options.binary_location = "/usr/bin/google-chrome"  # important for Render
 
         driver = webdriver.Chrome(ChromeDriverManager().install(), options=options)
         driver.get(f"https://www.google.com/maps/search/{query}")
