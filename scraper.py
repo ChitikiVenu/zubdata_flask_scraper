@@ -11,16 +11,19 @@ def scrape_google_maps(query):
     options.add_argument("--disable-dev-shm-usage")
 
     # ✅ Tell Selenium where Render installed Chromium
-    chrome_bin = os.getenv("CHROME_BIN", "/usr/bin/chromium-browser")
+    chrome_bin = os.getenv("CHROME_BIN", "/usr/bin/chromium")
     options.binary_location = chrome_bin
 
     try:
-        service = Service(ChromeDriverManager().install())
+        # ✅ Use system chromedriver if available
+        chromedriver_path = os.getenv("CHROMEDRIVER_PATH", ChromeDriverManager().install())
+        service = Service(chromedriver_path)
         driver = webdriver.Chrome(service=service, options=options)
+
         driver.get(f"https://www.google.com/maps/search/{query.replace(' ', '+')}")
         time.sleep(5)
-        page_source = driver.page_source
+        html = driver.page_source
         driver.quit()
-        return page_source
+        return html
     except Exception as e:
         return str(e)
